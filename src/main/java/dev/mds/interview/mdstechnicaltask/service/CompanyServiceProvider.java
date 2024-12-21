@@ -41,13 +41,13 @@ public class CompanyServiceProvider implements CompanyService {
 	}
 
 	@Override
-	public Company getById(Integer id) {
+	public Company getById(Long id) {
 		logger.info("CompanyServiceProvider getById " + id.toString());
 		return repository.getReferenceById(id);
 	}
 
 	@Override
-	public void delete(Integer id) {
+	public void delete(Long id) {
 		logger.info("CompanyServiceProvider delete " + id);
 		repository.deleteById(id);
 	}

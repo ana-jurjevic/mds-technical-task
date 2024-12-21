@@ -11,32 +11,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.mds.interview.mdstechnicaltask.model.Company;
-import dev.mds.interview.mdstechnicaltask.service.CompanyService;
+import dev.mds.interview.mdstechnicaltask.model.StockHistory;
+import dev.mds.interview.mdstechnicaltask.service.StockHistoryService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/companies")
-public class CompanyController {
-	
+@RequestMapping("/api/stocks")
+public class StockHistoryController {
+
 	@Autowired
-	private CompanyService service;
-	
+	private StockHistoryService service;
+
 	@GetMapping
-	public List<Company> findAll(){
+	public List<StockHistory> findAll() {
 		return service.getData();
 	}
-	
+
 	@PostMapping
-	public Company create(@RequestBody @Valid Company company) {
+	public StockHistory create(@RequestBody @Valid StockHistory company) {
 		return service.insert(company);
 	}
-	
+
 	@PutMapping("/{id}")
-	public Company update(@RequestBody Company company, @PathVariable Integer id) {
+	public StockHistory update(@RequestBody StockHistory company, @PathVariable Long id) {
 		return service.update(company);
 	}
-	
+
 	public void delete(@PathVariable Long id) {
 		service.delete(id);
 	}

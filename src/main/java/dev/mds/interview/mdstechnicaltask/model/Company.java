@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
 public class Company {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	@NotBlank(message = "Code is mandatory")
 	private String code;
 	@NotBlank(message = "Name is mandatory")
@@ -24,11 +24,11 @@ public class Company {
 	@NotNull(message = "Established on is mandatory")
 	private Date establishedOn;
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

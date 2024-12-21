@@ -8,7 +8,7 @@ public interface CompanyService {
 
 	public List<Company> getData();
 	
-	public Company getById(Integer id);
+	public Company getById(Long id);
 	
 	public Company insert(Company entity);
 	
@@ -16,5 +16,5 @@ public interface CompanyService {
 	
 	public void delete(Company entity);
 	
-	public void delete(Integer id);
+	public void delete(Long id);
 }

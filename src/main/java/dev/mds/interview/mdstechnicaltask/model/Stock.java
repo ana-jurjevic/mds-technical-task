@@ -13,7 +13,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(name = "UNIQUE_CODE", columnNames = { "code" }))
-public class Company {
+public class Stock {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -58,6 +58,6 @@ public class Company {
 
 	@Override
 	public String toString() {
-		return "Company [id=" + id + ", code=" + code + ", name=" + name + ", establishedOn=" + establishedOn + "]";
+		return "Stock [id=" + id + ", code=" + code + ", name=" + name + ", establishedOn=" + establishedOn + "]";
 	}
 }

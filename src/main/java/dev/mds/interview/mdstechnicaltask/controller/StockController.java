@@ -11,30 +11,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.mds.interview.mdstechnicaltask.model.Company;
-import dev.mds.interview.mdstechnicaltask.service.CompanyService;
+import dev.mds.interview.mdstechnicaltask.model.Stock;
+import dev.mds.interview.mdstechnicaltask.service.StockService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/companies")
-public class CompanyController {
+@RequestMapping("/api/stocks")
+public class StockController {
 	
 	@Autowired
-	private CompanyService service;
+	private StockService service;
 	
 	@GetMapping
-	public List<Company> findAll(){
+	public List<Stock> findAll(){
 		return service.getData();
 	}
 	
 	@PostMapping
-	public Company create(@RequestBody @Valid Company company) {
-		return service.insert(company);
+	public Stock create(@RequestBody @Valid Stock entity) {
+		return service.insert(entity);
 	}
 	
 	@PutMapping("/{id}")
-	public Company update(@RequestBody Company company, @PathVariable Integer id) {
-		return service.update(company);
+	public Stock update(@RequestBody Stock entity, @PathVariable Integer id) {
+		return service.update(entity);
 	}
 	
 	public void delete(@PathVariable Long id) {

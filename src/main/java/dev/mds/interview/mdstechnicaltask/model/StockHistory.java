@@ -14,16 +14,15 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 
-@Table(name = "stock")
 @Entity 
 public class StockHistory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotNull(message = "Company is mandatory")
+	@NotNull(message = "Stock is mandatory")
 	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "company_id", referencedColumnName = "id")
-	private Company company;
+    @JoinColumn(name = "stock_id", referencedColumnName = "id")
+	private Stock stock;
 	@Temporal(TemporalType.DATE)
 	private Date date;
 	private Double open;
@@ -39,11 +38,11 @@ public class StockHistory {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Company getCompany() {
-		return company;
+	public Stock getStock() {
+		return stock;
 	}
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setStock(Stock stock) {
+		this.stock = stock;
 	}
 	public Date getDate() {
 		return date;
@@ -90,7 +89,7 @@ public class StockHistory {
 	
 	@Override
 	public String toString() {
-		return "Stock [company=" + company + ", date=" + date + ", open=" + open + ", high=" + high + ", low=" + low
+		return "Stock [stock=" + stock + ", date=" + date + ", open=" + open + ", high=" + high + ", low=" + low
 				+ ", close=" + close + ", adjustedClose=" + adjustedClose + ", volume=" + volume + "]";
 	}
 }

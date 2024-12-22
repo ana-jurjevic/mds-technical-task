@@ -16,7 +16,7 @@ import dev.mds.interview.mdstechnicaltask.service.StockHistoryService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/stocks")
+@RequestMapping("/api/stockhistory")
 public class StockHistoryController {
 
 	@Autowired
@@ -28,13 +28,13 @@ public class StockHistoryController {
 	}
 
 	@PostMapping
-	public StockHistory create(@RequestBody @Valid StockHistory company) {
-		return service.insert(company);
+	public StockHistory create(@RequestBody @Valid StockHistory entity) {
+		return service.insert(entity);
 	}
 
 	@PutMapping("/{id}")
-	public StockHistory update(@RequestBody StockHistory company, @PathVariable Long id) {
-		return service.update(company);
+	public StockHistory update(@RequestBody StockHistory entity, @PathVariable Long id) {
+		return service.update(entity);
 	}
 
 	public void delete(@PathVariable Long id) {

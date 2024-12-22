@@ -16,7 +16,7 @@ public class StockHistoryPeriodAnalysisReportEntity {
 	
 	private StockHistoryCalculator calculator;
 	
-	// optional List<String> moreProfitableStocks
+	//TODO JA optional List<String> moreProfitableStocks
 	
 	public StockHistoryPeriodAnalysisReportEntity(List<StockHistory> data){
 		this.calculator = new StockHistoryAnalysisCalculator();

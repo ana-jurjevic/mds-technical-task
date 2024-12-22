@@ -1,13 +1,19 @@
 package dev.mds.interview.mdstechnicaltask.service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dev.mds.interview.mdstechnicaltask.model.Company;
 import dev.mds.interview.mdstechnicaltask.model.StockHistory;
 import dev.mds.interview.mdstechnicaltask.repository.StockHistoryRepository;
+import dev.mds.interview.mdstechnicaltask.service.stockhistoryreport.StockHistoryPeriodAnalysisReportEntity;
+import dev.mds.interview.mdstechnicaltask.service.stockhistoryreport.StockHistoryAnalysisReportEntity;
 import dev.mds.interview.mdstechnicaltask.system.AppLogger;
+import dev.mds.interview.mdstechnicaltask.system.utils.DateUtils;
 
 @Service
 public class StockHistoryServiceProvider implements StockHistoryService {
@@ -15,6 +21,9 @@ public class StockHistoryServiceProvider implements StockHistoryService {
 	
 	@Autowired
 	StockHistoryRepository repository;
+	
+	@Autowired
+	CompanyService companyService;
 
 	@Override
 	public List<StockHistory> getData() {
@@ -50,5 +59,16 @@ public class StockHistoryServiceProvider implements StockHistoryService {
 	public void delete(Long id) {
 		logger.info("StockServiceProvider delete " + id);
 		repository.deleteById(id);
+	}
+
+	@Override
+	public StockHistoryAnalysisReportEntity search(String stockCode, Date dateFrom, Date dateTo) {
+		long daysCount = DateUtils.daysBetween(dateFrom, dateTo); // TODO JA add logic to preceding and following periods
+		Company stock = companyService.getByCode(stockCode); // TODO JA handle not found (same for id)
+		logger.info("Stock: " + stock);
+		List<StockHistory> mainPeriodData = repository.search(dateFrom, dateTo, stock);
+		List<StockHistoryPeriodAnalysisReportEntity> dataByPeriod = new ArrayList<>();
+		dataByPeriod.add(new StockHistoryPeriodAnalysisReportEntity(mainPeriodData));
+		return new StockHistoryAnalysisReportEntity(stock, dataByPeriod);
 	}
 }

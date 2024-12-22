@@ -51,4 +51,10 @@ public class CompanyServiceProvider implements CompanyService {
 		logger.info("CompanyServiceProvider delete " + id);
 		repository.deleteById(id);
 	}
+
+	@Override
+	public Company getByCode(String code) {
+		logger.info("CompanyServiceProvider getByCode " + code);
+		return repository.getByCode(code);
+	}
 }

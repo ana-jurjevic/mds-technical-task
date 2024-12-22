@@ -10,6 +10,8 @@ public interface CompanyService {
 	
 	public Company getById(Long id);
 	
+	public Company getByCode(String code);
+	
 	public Company insert(Company entity);
 	
 	public Company update(Company entity);

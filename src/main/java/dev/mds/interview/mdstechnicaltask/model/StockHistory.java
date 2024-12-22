@@ -10,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 
 @Table(name = "stock")
@@ -22,6 +24,7 @@ public class StockHistory {
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id", referencedColumnName = "id")
 	private Company company;
+	@Temporal(TemporalType.DATE)
 	private Date date;
 	private Double open;
 	private Double high;

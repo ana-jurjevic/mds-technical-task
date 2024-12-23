@@ -1,9 +1,0 @@
-services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=trading'
-      - 'POSTGRES_PASSWORD=aj241218'
-      - 'POSTGRES_USER=admin'
-    ports:
-      - '5432:5432'

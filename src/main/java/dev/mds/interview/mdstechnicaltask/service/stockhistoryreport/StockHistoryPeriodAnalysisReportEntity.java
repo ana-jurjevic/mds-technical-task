@@ -1,26 +1,33 @@
 package dev.mds.interview.mdstechnicaltask.service.stockhistoryreport;
 
+import java.util.AbstractMap;
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
+import dev.mds.interview.mdstechnicaltask.model.Stock;
 import dev.mds.interview.mdstechnicaltask.model.StockHistory;
 
 public class StockHistoryPeriodAnalysisReportEntity {
-	private List<StockHistory> data;
+	private Date dateFrom;
+	private Date dateTo;
+	private List<StockHistory> periodStockData;
 	private Date bestBuyDate;
 	private Double bestBuyValue;
 	private Date bestSellDate;
 	private Double bestSellValue;
 	private Double profit;
 	private Double maxProfit;
+	private List<Stock> moreProfitableStocks;
 	
 	private StockHistoryCalculator calculator;
 	
-	//TODO JA optional List<String> moreProfitableStocks
-	
-	public StockHistoryPeriodAnalysisReportEntity(List<StockHistory> data){
+	public StockHistoryPeriodAnalysisReportEntity(Date dateFrom, Date dateTo, List<StockHistory> data, List<StockHistory> otherStockData){
 		this.calculator = new StockHistoryAnalysisCalculator();
-		this.data = data;
+		this.dateFrom = dateFrom;
+		this.dateTo = dateTo;
+		this.periodStockData = data;
 		StockHistory[] bestTrade = calculator.calculateBestBuySell(data);
 		if (bestTrade.length == 0) {
 			return;
@@ -31,10 +38,14 @@ public class StockHistoryPeriodAnalysisReportEntity {
 		this.bestSellValue = bestTrade[1].getClose();
 		this.profit = calculator.calculateProfit(bestTrade[0], bestTrade[1]);
 		this.maxProfit = calculator.calculateMaxProfit(data);
+		moreProfitableStocks = otherStockData.stream().collect(Collectors.groupingBy(StockHistory::getStock)).entrySet()
+				.stream()
+				.map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), calculator.calculateMaxProfit(e.getValue())))
+				.filter(e -> e.getValue() > maxProfit).map(Entry::getKey).toList();
 	}
 
-	public List<StockHistory> getData() {
-		return data;
+	public List<StockHistory> getPeriodStockData() {
+		return periodStockData;
 	}
 
 	public Date getBestBuyDate() {
@@ -59,5 +70,17 @@ public class StockHistoryPeriodAnalysisReportEntity {
 
 	public Double getMaxProfit() {
 		return maxProfit;
+	}
+
+	public Date getDateFrom() {
+		return dateFrom;
+	}
+
+	public Date getDateTo() {
+		return dateTo;
+	}
+
+	public List<Stock> getMoreProfitableStocks() {
+		return moreProfitableStocks;
 	}
 }

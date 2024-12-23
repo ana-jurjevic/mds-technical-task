@@ -1,19 +1,16 @@
 package dev.mds.interview.mdstechnicaltask.controller.dto;
 
-import dev.mds.interview.mdstechnicaltask.model.StockHistory;
+import java.util.List;
 
-//TODO JA
 public class StockHistoryAnalysisResponse {
-	private Long id;
-	
-	public StockHistoryAnalysisResponse(StockHistory entity) {
-		this.id = entity.getId();
+	private List<StockHistoryAnalysisData> periods;
+
+	public StockHistoryAnalysisResponse(List<StockHistoryAnalysisData> periods) {
+		super();
+		this.periods = periods;
 	}
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
+
+	public List<StockHistoryAnalysisData> getPeriods() {
+		return periods;
 	}
 }

@@ -15,4 +15,8 @@ public interface StockHistoryRepository extends JpaRepository<StockHistory, Long
 	@Query("select e from StockHistory e where e.date >= :dateFrom and e.date <= :dateTo and e.stock = :stock order by e.date asc")
 	public List<StockHistory> search(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo,
 			@Param("stock") Stock stock);
+	
+	@Query("select e from StockHistory e where e.date >= :dateFrom and e.date <= :dateTo and e.stock != :stock order by e.date asc")
+	public List<StockHistory> searchOtherStocks(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo,
+			@Param("stock") Stock stockToExclude);
 }

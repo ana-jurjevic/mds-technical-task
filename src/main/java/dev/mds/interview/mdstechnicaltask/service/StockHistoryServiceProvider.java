@@ -63,12 +63,18 @@ public class StockHistoryServiceProvider implements StockHistoryService {
 
 	@Override
 	public StockHistoryAnalysisReportEntity search(String stockCode, Date dateFrom, Date dateTo) {
-		long daysCount = DateUtils.daysBetween(dateFrom, dateTo); // TODO JA add logic to preceding and following periods
-		Stock stock = stockService.getByCode(stockCode); // TODO JA handle not found (same for id)
+		logger.info("StockServiceProvider search for stockCode: " + stockCode + ", dateFrom: " + dateFrom + ", dateTo: " + dateTo);
+		long daysCount = DateUtils.daysBetween(dateFrom, dateTo);
+		Stock stock = stockService.getByCode(stockCode);
 		logger.info("Stock: " + stock);
-		List<StockHistory> mainPeriodData = repository.search(dateFrom, dateTo, stock);
+		Date precedingPeriodDateFrom = DateUtils.addDays(dateFrom, -(int) daysCount-1);
+		Date precedingPeriodDateTo = DateUtils.addDays(dateFrom, -1);
+		Date followingPeriodDateFrom = DateUtils.addDays(dateTo, 1);
+		Date followingPeriodDateTo = DateUtils.addDays(dateTo, (int) daysCount + 1);
 		List<StockHistoryPeriodAnalysisReportEntity> dataByPeriod = new ArrayList<>();
-		dataByPeriod.add(new StockHistoryPeriodAnalysisReportEntity(mainPeriodData));
+		dataByPeriod.add(new StockHistoryPeriodAnalysisReportEntity(dateFrom, dateTo, repository.search(dateFrom, dateTo, stock), repository.searchOtherStocks(dateFrom, dateTo, stock)));
+		dataByPeriod.add(new StockHistoryPeriodAnalysisReportEntity(precedingPeriodDateFrom, precedingPeriodDateTo, repository.search(precedingPeriodDateFrom, precedingPeriodDateTo, stock), repository.searchOtherStocks(precedingPeriodDateFrom, precedingPeriodDateTo, stock)));
+		dataByPeriod.add(new StockHistoryPeriodAnalysisReportEntity(followingPeriodDateFrom, followingPeriodDateTo, repository.search(followingPeriodDateFrom, followingPeriodDateTo, stock), repository.searchOtherStocks(followingPeriodDateFrom, followingPeriodDateTo, stock)));
 		return new StockHistoryAnalysisReportEntity(stock, dataByPeriod);
 	}
 }

@@ -1,8 +1,11 @@
 package dev.mds.interview.mdstechnicaltask.service.stockhistoryreport;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
+import java.util.Set;
 
 import dev.mds.interview.mdstechnicaltask.model.StockHistory;
 
@@ -48,42 +51,45 @@ public class StockHistoryAnalysisCalculator implements StockHistoryCalculator {
         
         int n = data.size();
         
-        List<State> statesToVisit = new ArrayList<>();
-        List<Double> possbileProfits = new ArrayList<>();
+        Queue<State> statesToVisit = new LinkedList<>();
+        Set<String> visitedStates = new HashSet<>();
+        double maxProfit = 0.0;
         
         // first day possible states
         statesToVisit.add(new State(0, -data.get(0).getClose(), 1)); // buy on first day
         statesToVisit.add(new State(0, 0.0, 0)); // hold on first day
         
         while (!statesToVisit.isEmpty()) {
-        	State currentState = statesToVisit.remove(0);
-			if (currentState.day == n - 1 && currentState.stockCount == 0 && currentState.balance > 0.0) {
-				possbileProfits.add(currentState.balance);
+        	State currentState = statesToVisit.poll();
+        	String currentStateKey = currentState.day + "-" + currentState.balance + "-" + currentState.stockCount; 
+			if (visitedStates.contains(currentStateKey)) {
+				continue;
+			}
+			visitedStates.add(currentStateKey);
+        	if (currentState.day == n - 1 && currentState.stockCount == 0 && currentState.balance > maxProfit) {
+        		maxProfit = currentState.balance;
 			}
 			if (currentState.day < n - 1) {
 				addNextStates(data, statesToVisit, currentState);
 			}
         }
 
-        return possbileProfits.stream().max(Double::compareTo).orElse(0.0); 
+        return maxProfit; 
 	}
 
-	private void addNextStates(List<StockHistory> data, List<State> statesToVisit, State currentState) {
-		// buy on day
-		State nextStateAfterBuying = new State(currentState.day+1, currentState.balance-data.get(currentState.day+1).getClose(), currentState.stockCount+1);
-		if (!statesToVisit.contains(nextStateAfterBuying)) {
-			statesToVisit.add(nextStateAfterBuying);
-		}
-		 // hold on day
-		State nextStateAfterHold = new State(currentState.day+1, currentState.balance, currentState.stockCount);
-		if (!statesToVisit.contains(nextStateAfterHold)) {
-			statesToVisit.add(nextStateAfterHold);
-		}
+	private void addNextStates(List<StockHistory> data, Queue<State> statesToVisit, State currentState) {
+		int day = currentState.day + 1;
+		Double closePrice = data.get(day).getClose();
+
+		State nextStateAfterBuying = new State(day, currentState.balance - closePrice, currentState.stockCount + 1); // buy on day
+		statesToVisit.add(nextStateAfterBuying);
+
+		State nextStateAfterHold = new State(day, currentState.balance, currentState.stockCount); // hold on day
+		statesToVisit.add(nextStateAfterHold);
+
 		if (currentState.stockCount > 0) {
-			State nextStateAfterSelling = new State(currentState.day+1, currentState.balance+data.get(currentState.day+1).getClose(), currentState.stockCount-1); // sell on day
-			if (!statesToVisit.contains(nextStateAfterSelling)) {
-				statesToVisit.add(nextStateAfterSelling);
-			}
+			State nextStateAfterSelling = new State(day, currentState.balance + closePrice, currentState.stockCount - 1); // sell on day
+			statesToVisit.add(nextStateAfterSelling);
 		}
 	}
 	

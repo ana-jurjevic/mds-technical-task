@@ -24,5 +24,4 @@ public interface StockHistoryCalculator {
 	 * @return max profit for multiple trades over the given period or 0 if no profit can be made
 	 */
 	Double calculateMaxProfit(List<StockHistory> data);
-	// TODO JA optional calculation
 }
